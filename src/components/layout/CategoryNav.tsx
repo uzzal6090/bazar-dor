@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -17,9 +16,9 @@ export default function CategoryNav({
   return (
     <nav
       aria-label="পণ্যের বিভাগ"
-      className="border-y border-[#e2e9e3] bg-white"
+      className="border-t border-[#e2e9e3] bg-white"
     >
-      <div className="mx-auto flex max-w-6xl items-center gap-1 overflow-x-auto px-3 py-2 sm:gap-3 sm:px-4">
+      <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 py-2 sm:gap-2">
         {categories.map((category) => {
           const href = `/category/${category.slug}`;
           const isActive = pathname === href;
@@ -29,13 +28,16 @@ export default function CategoryNav({
               key={category.id}
               href={href}
               aria-current={isActive ? "page" : undefined}
-              className={`flex shrink-0 items-center gap-1.5 rounded-md px-2 py-2 text-xs transition-colors sm:text-sm ${
+              className={`flex shrink-0 items-center gap-1.5 rounded-md px-3 py-2 text-sm transition-colors ${
                 isActive
                   ? "bg-[#e5f4e9] font-semibold text-[#168044]"
                   : "text-[#34443a] hover:bg-[#f0f6f1]"
               }`}
             >
-              <span aria-hidden="true">{category.icon}</span>
+              <span aria-hidden="true">
+                {category.icon}
+              </span>
+
               <span>{category.nameBn}</span>
             </Link>
           );
