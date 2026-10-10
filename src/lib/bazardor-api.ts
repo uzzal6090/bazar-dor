@@ -29,26 +29,23 @@ export async function getProducts(): Promise<Product[]> {
 export async function getProductsByCategory(
   category: string,
 ): Promise<Product[]> {
-  const res = await fetch(
-    `${BASE_URL}/products?category=${encodeURIComponent(category)}`,
-    { cache: "force-cache" },
-  );
+  const products = await getProducts();
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch products by category");
-  }
-
-  return res.json();
+  return products.filter((product) => product.category === category);
 }
 
 export async function getCategoryBySlug(
   slug: string,
 ): Promise<Category | null> {
   const categories = await getCategories();
-  return categories.find((c) => c.slug === slug) ?? null;
+
+  return categories.find((category) => category.slug === slug) ?? null;
 }
 
-export async function getProductBySlug(slug: string): Promise<Product | null> {
+export async function getProductBySlug(
+  slug: string,
+): Promise<Product | null> {
   const products = await getProducts();
-  return products.find((p) => p.slug === slug) ?? null;
+
+  return products.find((product) => product.slug === slug) ?? null;
 }

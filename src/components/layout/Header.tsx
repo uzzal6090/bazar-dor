@@ -1,39 +1,41 @@
+import Link from "next/link";
+import { Suspense } from "react";
+import AuthButtons from "./AuthButtons";
 import CategoryNav from "./CategoryNav";
-import { getCategories } from "@/lib/bazardor-api";
+import PriceTicker from "./PriceTicker";
+import BanglaDate from "./BanglaDate";
+import { getCategories, getProducts } from "@/lib/bazardor-api";
+import Image from "next/image";
 
 const Header = async () => {
   const categories = await getCategories();
+  const products = await getProducts();
 
   return (
-   <header className="border-b border-[#e2e9e3] bg-white">
-  <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-    <div>
-      <div className="flex items-center gap-2">
-        <span className="text-2xl">🛒</span>
+    <header className="border-b border-[#e2e9e3] bg-white">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <Link href="/">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/logo-icon.png"
+              alt="বাজার দর লোগো"
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded-xl"
+            />
+            <span className="text-xl font-bold text-[#17231b]">বাজার দর</span>
+          </div>
+          <BanglaDate className="mt-1 text-xs text-[#68756c]" />
+        </Link>
 
-        <h1 className="text-xl font-bold text-[#17231b]">
-          বাজার দর
-        </h1>
+        <AuthButtons />
       </div>
 
-      <p className="mt-1 text-xs text-[#68756c]">
-        বৃহস্পতিবার, ৮ অক্টোবর ২০২৬
-      </p>
-    </div>
-
-    <div className="flex items-center gap-2">
-      <button className="rounded-md px-3 py-2 text-sm font-medium text-[#34443a] hover:bg-[#f0f6f1]">
-        সাইন ইন
-      </button>
-
-      <button className="rounded-md bg-[#168044] px-3 py-2 text-sm font-medium text-white hover:bg-[#126b39]">
-        সাইন আপ
-      </button>
-    </div>
-  </div>
-
-  <CategoryNav categories={categories} />
-</header>
+      <Suspense fallback={null}>
+        <CategoryNav categories={categories} />
+      </Suspense>
+      <PriceTicker products={products} />
+    </header>
   );
 };
 

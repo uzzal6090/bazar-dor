@@ -1,23 +1,17 @@
 import { betterAuth } from "better-auth";
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
+import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const globalForMongo = globalThis as unknown as {
-  mongoClient?: MongoClient;
-};
-
-const client =
-  globalForMongo.mongoClient ??
-  new MongoClient(process.env.MONGODB_URL as string);
-
-if (process.env.NODE_ENV !== "production") {
-  globalForMongo.mongoClient = client;
-}
-
-const db = client.db();
+const client = new MongoClient(process.env.MONGODB_URL as string);
+const db = client.db("bazardor");
 
 export const auth = betterAuth({
   database: mongodbAdapter(db),
+  baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: [
+    process.env.BETTER_AUTH_URL as string,
+    "https://*.vercel.app",
+  ],
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,

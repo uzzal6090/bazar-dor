@@ -8,12 +8,13 @@ import {
 } from "@/lib/format";
 
 const BADGE_BG: Record<"up" | "down" | "flat", string> = {
-  up: "bg-red-50",
-  down: "bg-green-50",
+  up: "bg-green-50",
+  down: "bg-red-50",
   flat: "bg-gray-100",
 };
 
 export default function ProductCard({ product }: { product: Product }) {
+ 
   return (
     <Link
       href={`/product/${product.slug}`}

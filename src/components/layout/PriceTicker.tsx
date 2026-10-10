@@ -1,33 +1,16 @@
-
 import type { Product } from "@/types/bazardor";
+import {
+  CHANGE_COLOR,
+  UNIT_SHORT,
+  formatChange,
+  formatPrice,
+} from "@/lib/format";
 
 interface PriceTickerProps {
   products: Product[];
 }
 
-function formatBengaliNumber(value: number): string {
-  return new Intl.NumberFormat("bn-BD", {
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
-function getUnitLabel(unit: string): string {
-  const units: Record<string, string> = {
-    kg: "কেজি",
-    liter: "লিটার",
-    litre: "লিটার",
-    l: "লিটার",
-    dozen: "ডজন",
-    piece: "পিস",
-    pcs: "পিস",
-  };
-
-  return units[unit.toLowerCase()] ?? unit;
-}
-
-export default function PriceTicker({
-  products,
-}: PriceTickerProps) {
+export default function PriceTicker({ products }: PriceTickerProps) {
   if (products.length === 0) {
     return null;
   }
@@ -39,56 +22,32 @@ export default function PriceTicker({
     >
       <div className="price-ticker-track flex w-max">
         {[0, 1].map((copy) => (
-          <div
-            key={copy}
-            aria-hidden={copy === 1}
-            className="flex shrink-0"
-          >
-            {products.map((product) => {
-              const direction = product.change?.dir;
-              const percentage = product.change?.pct ?? 0;
+          <div key={copy} aria-hidden={copy === 1} className="flex shrink-0">
+            {products.map((product) => (
+              <div
+                key={`${copy}-${product.id}`}
+                className="flex shrink-0 items-center gap-2 border-r border-[#e6ece7] px-4 py-3 text-xs sm:px-5 sm:text-sm"
+              >
+                <span aria-hidden="true">
+                  {product.image || product.categoryIcon}
+                </span>
 
-              const directionSymbol =
-                direction === "up"
-                  ? "▲"
-                  : direction === "down"
-                    ? "▼"
-                    : "—";
+                <span className="font-medium text-[#34443a]">
+                  {product.nameBn}
+                </span>
 
-              const changeColor =
-                direction === "up"
-                  ? "text-green-700"
-                  : direction === "down"
-                    ? "text-red-600"
-                    : "text-gray-500";
+                <span className="whitespace-nowrap text-gray-600">
+                  {formatPrice(product.today)} টাকা/
+                  {UNIT_SHORT[product.unit] ?? product.unit}
+                </span>
 
-              return (
-                <div
-                  key={`${copy}-${product.id}`}
-                  className="flex shrink-0 items-center gap-2 border-r border-[#e6ece7] px-4 py-3 text-xs sm:px-5 sm:text-sm"
+                <span
+                  className={`whitespace-nowrap text-[11px] font-semibold ${CHANGE_COLOR[product.change.dir]}`}
                 >
-                  <span aria-hidden="true">
-                    {product.image || product.categoryIcon}
-                  </span>
-
-                  <span className="font-medium text-[#34443a]">
-                    {product.nameBn}
-                  </span>
-
-                  <span className="whitespace-nowrap text-gray-600">
-                    {formatBengaliNumber(product.today)} টাকা/
-                    {getUnitLabel(product.unit)}
-                  </span>
-
-                  <span
-                    className={`whitespace-nowrap text-[11px] font-semibold ${changeColor}`}
-                  >
-                    {directionSymbol}{" "}
-                    {formatBengaliNumber(Math.abs(percentage))}%
-                  </span>
-                </div>
-              );
-            })}
+                  {formatChange(product.change)}
+                </span>
+              </div>
+            ))}
           </div>
         ))}
       </div>

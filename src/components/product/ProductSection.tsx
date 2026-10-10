@@ -27,11 +27,17 @@ export default function ProductSection({
 
       {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
 
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {products.length > 0 ? (
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        <p className="mt-4 rounded-xl border border-[#e2e9e3] bg-white p-6 text-center text-sm text-gray-500">
+          এই মুহূর্তে কোনো পণ্য পাওয়া যায়নি।
+        </p>
+      )}
     </section>
   );
 }

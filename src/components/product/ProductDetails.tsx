@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import type { Product } from "@/types/bazardor";
 import {
@@ -25,45 +26,78 @@ function StatCard({
   return (
     <div className="rounded-2xl border border-[#e2e9e3] p-4">
       <p className="text-xs text-gray-500">{label}</p>
+
       <p className={`text-2xl font-bold ${valueClassName}`}>
-        {formatPrice(value)} <span className="text-sm">টাকা</span>
+        {formatAverage(value)} <span className="text-sm">টাকা</span>
       </p>
+
       <p className="mt-1 text-xs text-gray-500">{note}</p>
     </div>
   );
 }
 
-export default function ProductDetails({ product }: { product: Product }) {
-  const min = Math.min(...product.markets.map((m) => m.min));
-  const max = Math.max(...product.markets.map((m) => m.max));
-  const average = product.today;
+export default function ProductDetails({
+  product,
+}: {
+  product: Product;
+}) {
+  const min =
+    product.markets.length > 0
+      ? Math.min(...product.markets.map((market) => market.min))
+      : 0;
+
+  const max =
+    product.markets.length > 0
+      ? Math.max(...product.markets.map((market) => market.max))
+      : 0;
+
+  const average =
+    product.markets.length > 0
+      ? product.markets.reduce(
+          (sum, market) =>
+            sum + (market.min + market.max) / 2,
+          0,
+        ) / product.markets.length
+      : 0;
+
   const diff = product.today - product.yesterday;
   const unitLabel = UNIT_LABEL[product.unit] ?? product.unit;
 
   const markets = [...product.markets].sort(
-    (a, b) => (a.min + a.max) / 2 - (b.min + b.max) / 2,
+    (a, b) =>
+      (a.min + a.max) / 2 - (b.min + b.max) / 2,
   );
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-      <nav className="flex flex-wrap gap-2 text-xs text-gray-500">
+      <nav
+        aria-label="ব্রেডক্রাম্ব"
+        className="flex flex-wrap gap-2 text-xs text-gray-500"
+      >
         <Link href="/" className="hover:underline">
           হোম
         </Link>
-        <span>›</span>
+
+        <span aria-hidden="true">›</span>
+
         <Link
           href={`/category/${product.category}`}
           className="hover:underline"
         >
           {product.categoryNameBn}
         </Link>
-        <span>›</span>
-        <span>{product.nameBn}</span>
+
+        <span aria-hidden="true">›</span>
+
+        <span aria-current="page">{product.nameBn}</span>
       </nav>
 
       <section className="flex flex-col justify-between gap-4 rounded-2xl border border-[#e2e9e3] bg-white p-5 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4">
-          <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gray-100 text-4xl">
+          <span
+            className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-gray-100 text-4xl"
+            aria-hidden="true"
+          >
             {product.image}
           </span>
 
@@ -78,8 +112,10 @@ export default function ProductDetails({ product }: { product: Product }) {
                 <strong>অপরিবর্তিত আছে</strong>
               ) : (
                 <>
-                  <strong>{diff > 0 ? "বেড়েছে" : "কমেছে"}</strong>,{" "}
-                  {toBn(Math.abs(diff))} টাকা
+                  <strong>
+                    {diff > 0 ? "বেড়েছে" : "কমেছে"}
+                  </strong>
+                  , {toBn(Math.abs(diff))} টাকা
                 </>
               )}
             </p>
@@ -88,6 +124,7 @@ export default function ProductDetails({ product }: { product: Product }) {
               <span className="rounded-full border border-[#d5dfd7] px-3 py-1 text-[#34443a]">
                 {product.categoryNameBn}
               </span>
+
               <span className="rounded-full border border-[#d5dfd7] px-3 py-1 text-[#34443a]">
                 {unitLabel}
               </span>
@@ -97,12 +134,15 @@ export default function ProductDetails({ product }: { product: Product }) {
 
         <div className="rounded-2xl bg-gray-50 px-6 py-4 text-center">
           <p className="text-xs text-gray-500">আজকের দাম</p>
+
           <p className="text-3xl font-bold text-[#17231b]">
             {formatPrice(product.today)}
           </p>
+
           <p className="text-xs text-gray-500">
             টাকা / {UNIT_SHORT[product.unit] ?? product.unit}
           </p>
+
           <span
             className={`mt-2 inline-block rounded-full px-2 py-1 text-xs font-semibold ${CHANGE_BG[product.change.dir]} ${CHANGE_COLOR[product.change.dir]}`}
           >
@@ -112,7 +152,9 @@ export default function ProductDetails({ product }: { product: Product }) {
       </section>
 
       <section className="rounded-2xl border border-[#e2e9e3] bg-white p-5">
-        <h2 className="mb-3 font-bold text-[#17231b]">দামের সারসংক্ষেপ</h2>
+        <h2 className="mb-3 font-bold text-[#17231b]">
+          দামের সারসংক্ষেপ
+        </h2>
 
         <div className="grid gap-3 sm:grid-cols-3">
           <StatCard
@@ -121,12 +163,14 @@ export default function ProductDetails({ product }: { product: Product }) {
             note="সবচেয়ে কম দামের বাজার"
             valueClassName="text-green-600"
           />
+
           <StatCard
             label="সর্বাধিক দাম"
             value={max}
             note="সবচেয়ে বেশি দামের বাজার"
             valueClassName="text-red-600"
           />
+
           <StatCard
             label="গড় দাম"
             value={average}
@@ -154,17 +198,35 @@ export default function ProductDetails({ product }: { product: Product }) {
             </thead>
 
             <tbody>
-              {markets.map((m) => (
-                <tr key={m.market}>
-                  <td>{m.market}</td>
-                  <td>{m.division}</td>
-                  <td className="text-right">{formatPrice(m.min)} টাকা</td>
-                  <td className="text-right">{formatPrice(m.max)} টাকা</td>
-                  <td className="text-right font-semibold">
-                    {formatAverage((m.min + m.max) / 2)} টাকা
+              {markets.length > 0 ? (
+                markets.map((market) => (
+                  <tr key={`${market.market}-${market.division}`}>
+                    <td>{market.market}</td>
+                    <td>{market.division}</td>
+                    <td className="text-right">
+                      {formatPrice(market.min)} টাকা
+                    </td>
+                    <td className="text-right">
+                      {formatPrice(market.max)} টাকা
+                    </td>
+                    <td className="text-right font-semibold">
+                      {formatAverage(
+                        (market.min + market.max) / 2,
+                      )}{" "}
+                      টাকা
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="py-8 text-center text-gray-500"
+                  >
+                    কোনো বাজারের তথ্য পাওয়া যায়নি।
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

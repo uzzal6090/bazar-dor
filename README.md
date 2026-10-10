@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+**BazarDor** is a daily essentials price tracker that shows today's price, price change and market-wise price comparison for everyday products in Bangladesh.
+
+- 🌐 **Live Link:** LIVE_LINK_HERE
+- 💻 **GitHub Repository:[** GITHUB_LINK_HERE]uzzal6090/bazar-dor
+
+## ✨ Key Features
+
+1. **Live price ticker:** an infinite scrolling marquee with emoji, name, price/unit and ▲/▼ change %.
+2. **Home dashboard:** top 6 price risers, top 6 fallers and a responsive grid of all products, with Bengali digits and skeleton loaders.
+3. **Category pages with sorting:** sort by default / price low to high / price high to low (numeric-safe), with a friendly 404 state.
+4. **Protected product details:** minimum, maximum and average price plus a market-wise price table (login required).
+5. **Authentication with BetterAuth:** email & password, Google and GitHub login, toast notifications and protected-route redirects.
+6. **Profile & update information:** view your profile and update your name.
+7. **Fully responsive** on mobile, tablet and desktop, with a custom 404 page.
+
+## 🛠️ Technologies Used
+
+- Next.js (App Router) + TypeScript
+- Tailwind CSS + DaisyUI
+- BetterAuth (MongoDB adapter)
+- react-hot-toast
+- Data API: `https://api.api-store.workers.dev/api/bazardor`
+
+## 🚀 Getting Started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env.local` file in the project root:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:3000
+MONGODB_URI=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📄 Routes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`/` · `/category/[slug]` · `/product/[slug]` (protected) · `/signin` · `/signup` · `/profile` · `/profile/update`
