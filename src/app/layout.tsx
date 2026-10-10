@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="bn" data-theme="light">
       <body className="flex min-h-screen flex-col">
-        <Header />
+        <Suspense fallback={<div className="h-28 bg-white" />}>
+  <Header />
+</Suspense>
         <main className="flex-1">{children}</main>
         <Footer />
         <Toaster position="top-center" />
