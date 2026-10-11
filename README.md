@@ -2,8 +2,8 @@
 
 **BazarDor** is a daily essentials price tracker that shows today's price, price change and market-wise price comparison for everyday products in Bangladesh.
 
-- 🌐 **Live Link:** LIVE_LINK_HERE
-- 💻 **GitHub Repository:[** GITHUB_LINK_HERE]uzzal6090/bazar-dor
+- 🌐 **Live Link:** (https://bazar-dor-indol.vercel.app/)
+- 💻 **GitHub Repository:https://github.com/uzzal6090/bazar-dor
 
 ## ✨ Key Features
 
